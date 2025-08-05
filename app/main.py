@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
@@ -46,18 +47,19 @@ def complete_task(task_id):
     task = Tasks.query.get_or_404(task_id)
     task.completed = not task.completed
     db.session.commit()
-    return redirect('/')
-
-@app.route('/edit/<int:task_id>', methods=['POST'])
-def edit_task(task_id):
-    task = Tasks.query.get_or_404(task_id)
     if request.method == 'POST':
-        task.title = request.form.get('title', task.title)
-        task.description = request.form.get('description', task.description)
-        task.tags = request.form.get('tags', task.tags)
+        task.completed = task.completed
         db.session.commit()
         return redirect('/')
-    return render_template('edit.html', task=task)
+    return redirect('/')
+
+@app.route('/edit/<int:task_id>', methods= ['GET', 'POST'])
+def edit_task(task_id):
+    task = Tasks.query.get_or_404(task_id)
+    pass
+    
+
+
 
 if __name__ == '__main__':
     with app.app_context():

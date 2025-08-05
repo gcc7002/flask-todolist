@@ -1,16 +1,17 @@
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 WORKDIR /app
 
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
-COPY . /app
+
+COPY . .
+
+ENV FLASK_APP=app
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_ENV=production
 
 EXPOSE 5120
 
-
-
-CMD ["python3", "main.py"]
-
-
+CMD ["flask", "run"]
