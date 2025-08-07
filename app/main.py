@@ -1,12 +1,17 @@
 from flask import Flask, request, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms import StringField, TextAreaField, BooleanField, SubmitField
+from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'iHatemyself'
 
 db = SQLAlchemy(app)
 
+#creating the database model
 class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -16,12 +21,22 @@ class Tasks(db.Model):
 
     def __repr__(self):
         return f'<Task {self.title}>'
+    
+    #creating the form for edit tasks
+class TaskForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = TextAreaField('Description')
+    tags = StringField('Tags')
+    completed = BooleanField('Completed')
+    submit = SubmitField('Submit')
 
 @app.route('/')
 def index():
     tasks = Tasks.query.all()
-    return render_template('iaindex.html', tasks=tasks)
+    forms = {task.id: TaskForm(obj=task) for task in tasks}
+    return render_template('home.html', tasks=tasks, forms=forms)
 
+#basic CRUD operations
 @app.route('/add', methods=['POST'])
 def add_task():
     title = request.form.get('title')
@@ -53,10 +68,14 @@ def complete_task(task_id):
         return redirect('/')
     return redirect('/')
 
-@app.route('/edit/<int:task_id>', methods= ['GET', 'POST'])
+@app.route('/edit/<int:task_id>', methods= ['POST'])
 def edit_task(task_id):
     task = Tasks.query.get_or_404(task_id)
-    pass
+    form = TaskForm(obj=task)
+    if form.validate_on_submit():
+        form.populate_obj(task)
+        db.session.commit()
+    return render_template('home.html', task=task, form=form)
     
 
 
@@ -64,4 +83,4 @@ def edit_task(task_id):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(port=5120, host='0.0.0.0')
+    app.run(debug=True,port=5120, host='0.0.0.0')
