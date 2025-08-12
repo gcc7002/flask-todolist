@@ -2,6 +2,11 @@
 
 A basic to-do list web app built with Flask and SQLite. You can add tasks with a title, optional description and tags. Tasks can also be marked as completed or deleted.
 
+### What i've learned
+-  The basics of flask framework like estructures | routes | Methods
+-  The basics of CRUD implementation (still learning)
+-  How to make full stack projects from scratch
+
 ---
 
 ## Features
@@ -9,7 +14,11 @@ A basic to-do list web app built with Flask and SQLite. You can add tasks with a
 - Add tasks
 - View all tasks
 - Delete tasks
-- Mark tasks as completed (WIP)
+- Mark tasks as completed 
 - Edit tasks (WIP)
 
 ---
+### how to Run
+- Clone repository
+- Activate Venv
+- Run in the main.py
