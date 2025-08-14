@@ -4,7 +4,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 
-app = Flask(__name__)
+
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'iHatemyself'
@@ -72,10 +73,7 @@ def complete_task(task_id):
 def edit_task(task_id):
     task = Tasks.query.get_or_404(task_id)
     form = TaskForm(obj=task)
-    if form.validate_on_submit():
-        form.populate_obj(task)
-        db.session.commit()
-    return render_template('home.html', task=task, form=form)
+    pass
     
 
 
