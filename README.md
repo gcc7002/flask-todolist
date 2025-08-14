@@ -13,3 +13,6 @@ A basic to-do list web app built with Flask and SQLite. You can add tasks with a
 - Edit tasks (WIP)
 
 ---
+### The App visualization
+![The web interface](![Untitleddesign-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/a6e7fc99-8335-48e4-a5fa-a239e82cc694)
+)
