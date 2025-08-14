@@ -9,7 +9,7 @@ A basic to-do list web app built with Flask and SQLite. You can add tasks with a
 - Add tasks
 - View all tasks
 - Delete tasks
-- Mark tasks as completed (WIP)
+- Mark tasks as completed 
 - Edit tasks (WIP)
 
 ---
