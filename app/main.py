@@ -1,8 +1,6 @@
 from flask import Flask, request, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
+
 
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -24,18 +22,11 @@ class Tasks(db.Model):
         return f'<Task {self.title}>'
     
     #creating the form for edit tasks
-class TaskForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    description = TextAreaField('Description')
-    tags = StringField('Tags')
-    completed = BooleanField('Completed')
-    submit = SubmitField('Submit')
 
 @app.route('/')
 def index():
     tasks = Tasks.query.all()
-    forms = {task.id: TaskForm(obj=task) for task in tasks}
-    return render_template('home.html', tasks=tasks, forms=forms)
+    return render_template('home.html', tasks=tasks)
 
 #basic CRUD operations
 @app.route('/add', methods=['POST'])
@@ -71,8 +62,6 @@ def complete_task(task_id):
 
 @app.route('/edit/<int:task_id>', methods= ['POST'])
 def edit_task(task_id):
-    task = Tasks.query.get_or_404(task_id)
-    form = TaskForm(obj=task)
     pass
     
 
@@ -81,4 +70,4 @@ def edit_task(task_id):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(port=5120, host='0.0.0.0')
+    app.run(debug= True, port=5120, host='0.0.0.0')
