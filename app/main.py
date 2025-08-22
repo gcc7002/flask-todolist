@@ -60,9 +60,19 @@ def complete_task(task_id):
         return redirect('/')
     return redirect('/')
 
-@app.route('/edit/<int:task_id>', methods= ['POST'])
+@app.route('/edit/<int:task_id>', methods= ['POST', 'GET'])
 def edit_task(task_id):
-    pass
+    task = Tasks.query.get_or_404(task_id)
+    if request.method == 'GET':
+        return render_template('edit.html', task=task)
+    #if the method is POST, update the task
+    if request.method == 'POST':
+        task.title = request.form.get('title')
+        task.description = request.form.get('description')
+        task.tags = request.form.get('tags')
+        db.session.commit()
+        return redirect('/')
+    return render_template('edit.html', task=task)
     
 
 

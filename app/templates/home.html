@@ -41,17 +41,6 @@
                         </h5>
                         <p class="card-text mb-1">{{ task.description or '' }}</p>
                         <small class="text-muted">Tags: {{ task.tags or 'none' }}</small>
-                        <form action="GET">
-                        <select name="Tag" id="Tag-{{task.id}}" class="form-select mt-2" aria-label="Default select example" >
-                            <option selected>Change Tag</option>
-                                {% if task.tags %}
-                                    {% for tag in task.tags.split(',') %}
-                                        <option value="{{ tag }}">{{ tag.capitalize() }}</option>
-                                      {% endfor %}
-                               {% endif %}
-                            <option value="none">None</option>
-                        </select>
-                        </form>
 
                         
 
@@ -61,6 +50,7 @@
                             <span class="badge bg-secondary">Pending</span>
                         {% endif %}
                     </div>
+
                     <div>
                         <form action="/complete/{{ task.id }}" method="POST" class="d-inline">
                             <button type="submit" class="btn btn-outline-success btn-sm">complete task</button>
@@ -68,8 +58,9 @@
                         <form action="/delete/{{ task.id }}" method="POST" class="d-inline">
                             <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
                         </form>
-                        <button class="btn btn-outline-warning btn-sm" onclick="Editmodal()" id="Enable_Edit">Edit</button>
-                        
+                        <form action="/edit/{{ task.id }}" method="GET" class="d-inline">
+                            <button type="submit" class="btn btn-outline-warning btn-sm">Edit</button>
+                        </form>
                         
                         
 

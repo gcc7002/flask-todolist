@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Edit Task</h1>
+
+        <!-- Form to edit task -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form action="/edit/{{ task.id }}" method="POST" class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" name="title" class="form-control" placeholder="Title" value="{{ task.title }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="description" class="form-control" placeholder="Description (optional)" value="{{ task.description }}">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="tags" class="form-control" placeholder="Tags (optional)" value="{{ task.tags }}">
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" class="btn btn-primary w-100">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Back button -->
+        <a href="/" class="btn btn-secondary">Back to To-Do List</a>
+    </div>
+    
+</body>
+</html>
