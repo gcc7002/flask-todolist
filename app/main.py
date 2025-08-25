@@ -1,11 +1,16 @@
 from flask import Flask, request, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+
+
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'iHatemyself'
 
 db = SQLAlchemy(app)
 
+#creating the database model
 class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -15,12 +20,15 @@ class Tasks(db.Model):
 
     def __repr__(self):
         return f'<Task {self.title}>'
+    
+    #creating the form for edit tasks
 
 @app.route('/')
 def index():
     tasks = Tasks.query.all()
-    return render_template('iaindex.html', tasks=tasks)
+    return render_template('home.html', tasks=tasks)
 
+#basic CRUD operations
 @app.route('/add', methods=['POST'])
 def add_task():
     title = request.form.get('title')
@@ -46,18 +54,28 @@ def complete_task(task_id):
     task = Tasks.query.get_or_404(task_id)
     task.completed = not task.completed
     db.session.commit()
+    if request.method == 'POST':
+        task.completed = task.completed
+        db.session.commit()
+        return redirect('/')
     return redirect('/')
 
-@app.route('/edit/<int:task_id>', methods=['POST'])
+@app.route('/edit/<int:task_id>', methods= ['POST', 'GET'])
 def edit_task(task_id):
     task = Tasks.query.get_or_404(task_id)
+    if request.method == 'GET':
+        return render_template('edit.html', task=task)
+    #if the method is POST, update the task
     if request.method == 'POST':
-        task.title = request.form.get('title', task.title)
-        task.description = request.form.get('description', task.description)
-        task.tags = request.form.get('tags', task.tags)
+        task.title = request.form.get('title')
+        task.description = request.form.get('description')
+        task.tags = request.form.get('tags')
         db.session.commit()
         return redirect('/')
     return render_template('edit.html', task=task)
+    
+
+
 
 if __name__ == '__main__':
     with app.app_context():
